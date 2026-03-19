@@ -50,9 +50,10 @@ export function KpiCard({ title, value, sub, icon, accent = "#3B82F6", delay = 0
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "danger" | "success" | "ghost";
   size?: "sm" | "md";
+  loading?: boolean;
   children: ReactNode;
 }
-export function Button({ variant = "primary", size = "md", className, children, ...props }: ButtonProps) {
+export function Button({ variant = "primary", size = "md", className, children, loading, ...props }: ButtonProps) {
   const base = "inline-flex items-center justify-center gap-1.5 font-medium rounded-lg transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed";
   const sizes = { sm: "text-xs px-3 py-1.5", md: "text-sm px-4 py-2" };
   const variants = {
@@ -63,8 +64,13 @@ export function Button({ variant = "primary", size = "md", className, children, 
     ghost:     "bg-transparent text-[#A1A1AA] hover:text-white hover:bg-[#1A1A1A] active:scale-[0.98]",
   };
   return (
-    <motion.button whileTap={{ scale: 0.97 }} className={cn(base, sizes[size], variants[variant], className)} {...(props as any)}>
-      {children}
+    <motion.button 
+      whileTap={loading ? {} : { scale: 0.97 }} 
+      className={cn(base, sizes[size], variants[variant], className)} 
+      disabled={loading || props.disabled}
+      {...(props as any)}
+    >
+      {loading ? <span className="opacity-70">Processing...</span> : children}
     </motion.button>
   );
 }
