@@ -112,7 +112,8 @@ export default function DashboardPage() {
   console.log("COMPLETED_AT:", projects.map((p: any) => p.completed_at));
 
   // Step 3: Temporary Debug (All completed projects)
-  const completedProjects = projects.filter((p: any) => p.status === "completed");
+  // Include 'archived' in completedProjects for persistent revenue
+  const completedProjects = projects.filter((p: any) => p.status === "completed" || p.status === "archived");
   const activeProjects = projects.filter((p: any) => p.status === "active");
 
   console.log("Step 3 - Completed Projects count:", completedProjects.length);

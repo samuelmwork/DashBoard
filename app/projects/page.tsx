@@ -142,10 +142,23 @@ function ProjectCard({ project, onRefresh }: { project: Project; onRefresh: () =
   };
 
   const deleteProject = async () => {
-    const { error } = await supabase.from('projects').delete().eq('id', project.id);
-    if (error) {
-      console.error("Error deleting project:", error);
-      return;
+    if (project.stage === "Completed") {
+      // Archive instead of delete to keep revenue persistent
+      const { error } = await supabase
+        .from('projects')
+        .update({ status: 'archived' })
+        .eq('id', project.id);
+      
+      if (error) {
+        console.error("Error archiving project:", error);
+        return;
+      }
+    } else {
+      const { error } = await supabase.from('projects').delete().eq('id', project.id);
+      if (error) {
+        console.error("Error deleting project:", error);
+        return;
+      }
     }
     onRefresh();
   };
@@ -296,7 +309,8 @@ export default function ProjectsPage() {
   const fetchProjects = async () => {
     const { data, error } = await supabase
       .from('projects')
-      .select('*');
+      .select('*')
+      .neq('status', 'archived');
 
     if (error) {
       console.error("Error fetching projects:", error);
