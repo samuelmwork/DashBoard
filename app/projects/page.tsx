@@ -303,16 +303,19 @@ export default function ProjectsPage() {
       return;
     }
 
-    const mappedProjects: Project[] = data.map((p: any) => ({
-      id: p.id,
-      clientName: p.client_name,
-      service: p.service,
-      budget: p.budget,
-      finalPrice: p.final_price,
-      description: p.description,
-      stage: (p.status.charAt(0).toUpperCase() + p.status.slice(1)) as ProjectStage,
-      startDate: new Date(p.created_at).toISOString().split("T")[0]
-    }));
+    const mappedProjects: Project[] = data.map((p: any) => {
+      const status = p.status || "upcoming";
+      return {
+        id: p.id,
+        clientName: p.client_name,
+        service: p.service,
+        budget: p.budget,
+        finalPrice: p.final_price,
+        description: p.description,
+        stage: (status.charAt(0).toUpperCase() + status.slice(1)) as ProjectStage,
+        startDate: new Date(p.created_at).toISOString().split("T")[0]
+      };
+    });
 
     setProjects(mappedProjects);
   };

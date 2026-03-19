@@ -151,17 +151,20 @@ export default function LeadsPage() {
       return;
     }
 
-    const mappedLeads: Lead[] = data.map((l: any) => ({
-      id: l.id,
-      name: l.name,
-      phone: l.phone,
-      service: l.service,
-      budget: l.budget,
-      timeline: l.timeline,
-      status: (l.status.charAt(0).toUpperCase() + l.status.slice(1)) as LeadStatus,
-      createdAt: new Date(l.created_at).toISOString().split("T")[0],
-      notes: l.notes
-    }));
+    const mappedLeads: Lead[] = data.map((l: any) => {
+      const status = l.status || "new";
+      return {
+        id: l.id,
+        name: l.name,
+        phone: l.phone,
+        service: l.service,
+        budget: l.budget,
+        timeline: l.timeline,
+        status: (status.charAt(0).toUpperCase() + status.slice(1)) as LeadStatus,
+        createdAt: new Date(l.created_at).toISOString().split("T")[0],
+        notes: l.notes
+      };
+    });
 
     setLeads(mappedLeads);
   };

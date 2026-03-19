@@ -30,16 +30,19 @@ export default function DashboardPage() {
       .order('created_at', { ascending: false });
     
     if (leadsData) {
-      setLeads(leadsData.map((l: any) => ({
-        id: l.id,
-        name: l.name,
-        phone: l.phone || "",
-        service: l.service,
-        budget: l.budget,
-        status: (l.status.charAt(0).toUpperCase() + l.status.slice(1)) as any,
-        createdAt: l.created_at,
-        timeline: l.timeline || ""
-      })));
+      setLeads(leadsData.map((l: any) => {
+        const status = l.status || "New";
+        return {
+          id: l.id,
+          name: l.name,
+          phone: l.phone || "",
+          service: l.service,
+          budget: l.budget,
+          status: (status.charAt(0).toUpperCase() + status.slice(1)) as any,
+          createdAt: l.created_at,
+          timeline: l.timeline || ""
+        };
+      }));
     }
 
     // Fetch Projects
@@ -53,20 +56,23 @@ export default function DashboardPage() {
 
     if (projectsData) {
       console.log("DASHBOARD - RAW PROJECTS FROM SUPABASE:", projectsData);
-      setProjects(projectsData.map((p: any) => ({
-        id: p.id,
-        clientName: p.client_name,
-        service: p.service,
-        budget: p.budget,
-        finalPrice: p.final_price,
-        description: p.description || "",
-        stage: (p.status.charAt(0).toUpperCase() + p.status.slice(1)) as any,
-        startDate: p.created_at,
-        created_at: p.created_at, // for raw access
-        status: p.status, // for raw access
-        final_price: p.final_price, // for raw access
-        completed_at: p.completed_at // MISSING MAPPING FIXED
-      })));
+      setProjects(projectsData.map((p: any) => {
+        const status = p.status || "upcoming";
+        return {
+          id: p.id,
+          clientName: p.client_name,
+          service: p.service,
+          budget: p.budget,
+          finalPrice: p.final_price,
+          description: p.description || "",
+          stage: (status.charAt(0).toUpperCase() + status.slice(1)) as any,
+          startDate: p.created_at,
+          created_at: p.created_at, // for raw access
+          status: p.status, // for raw access
+          final_price: p.final_price, // for raw access
+          completed_at: p.completed_at
+        };
+      }));
     } else {
       console.warn("DASHBOARD - NO PROJECTS DATA RETURNED");
     }
