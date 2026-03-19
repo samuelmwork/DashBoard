@@ -1,18 +1,18 @@
 # Dependencies
-**/node_modules/
-**/.next/
+node_modules/
+.next/
 
 # Local env files
 .env*.local
 .env
 
 # Next.js
-freelance-dashboard/out/
-freelance-dashboard/standalone/
+out/
+standalone/
 
 # Production
-freelance-dashboard/dist/
-freelance-dashboard/build/
+dist/
+build/
 
 # IDE
 .vscode/
